@@ -6,6 +6,7 @@ use App\Enums\PersonType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Partner extends Model
@@ -52,4 +53,8 @@ class Partner extends Model
         return $this->morphMany(Report::class);
     }
 
+    public function configuration(): HasOne
+    {
+        return $this->hasOne(Configuration::class);
+    }
 }

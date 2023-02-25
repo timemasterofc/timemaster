@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Enums\ServiceStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -76,5 +77,15 @@ class User extends Authenticatable
     public function reportables(): MorphMany
     {
         return $this->morphMany(Report::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Post::class, 'favorites', 'post_id', 'user_id');
     }
 }
