@@ -3,14 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\ServiceStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +27,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'active',
+        'banned',
+        'verified_document'
     ];
 
     /**
@@ -40,5 +49,43 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'active' => 'boolean',
+        'banned' => 'boolean',
+        'verified_document' => 'datetime'
     ];
+
+    public function partner(): HasOne
+    {
+        return $this->hasOne(Partner::class);
+    }
+
+    public function blockedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'blocked_user', 'user_id', 'blocked_user_id');
+    }
+
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(Partner::class, 'followers', 'user_id', 'partner_id');
+    }
+
+    public function viewProfiles()
+    {
+        return $this->hasMany(ViewProfile::class);
+    }
+
+    public function reportables(): MorphMany
+    {
+        return $this->morphMany(Report::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Post::class, 'favorites', 'post_id', 'user_id');
+    }
 }
