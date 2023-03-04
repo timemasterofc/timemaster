@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('partner_review_question', function (Blueprint $table) {
+        Schema::create('partner_review_question', function (Blueprint $table) {
             $table->foreignId('partner_review_id')->constrained('partner_reviews');
             $table->foreignId('question_id')->constrained('questions');
             $table->integer('note');

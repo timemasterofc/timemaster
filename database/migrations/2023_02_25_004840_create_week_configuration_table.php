@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('week_configuration', function (Blueprint $table) {
+        Schema::create('week_configuration', function (Blueprint $table) {
             $table->foreignId('week_id')->constrained('weeks');
             $table->foreignId('configuration_id')->constrained('configurations');
             $table->time('office_start');

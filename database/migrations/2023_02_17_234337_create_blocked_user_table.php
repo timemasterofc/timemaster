@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('blocked_user', function (Blueprint $table) {
+        Schema::create('blocked_user', function (Blueprint $table) {
             $table->foreignId('blocked_user_id')->constrained('users');
             $table->foreignId('user_id')->constrained('users');
         });
